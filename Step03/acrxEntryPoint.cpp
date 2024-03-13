@@ -24,6 +24,8 @@
 //-----------------------------------------------------------------------------
 #include "StdAfx.h"
 #include "resource.h"
+#include "utilities.h"
+#include <memory>
 
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("")
@@ -59,86 +61,35 @@ public:
 
 	virtual void RegisterServerComponents () {
 	}
-	
-	// The ACED_ARXCOMMAND_ENTRY_AUTO macro can be applied to any static member 
-	// function of the CStep03App class.
-	// The function should take no arguments and return nothing.
-	//
-	// NOTE: ACED_ARXCOMMAND_ENTRY_AUTO has overloads where you can provide resourceid and
-	// have arguments to define context and command mechanism.
-	
-	// ACED_ARXCOMMAND_ENTRY_AUTO(classname, group, globCmd, locCmd, cmdFlags, UIContext)
-	// ACED_ARXCOMMAND_ENTRYBYID_AUTO(classname, group, globCmd, locCmdId, cmdFlags, UIContext)
-	// only differs that it creates a localized name using a string in the resource file
-	//   locCmdId - resource ID for localized command
 
-	// Modal Command with localized name
-	// ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, MyGroup, MyCommand, MyCommandLocal, ACRX_CMD_MODAL)
-	static void MyGroupMyCommand () {
-		// Put your command code here
+	static void Step03_createBlockRecord() {
+		try	{
+			BlockTableWrapper cBlockTable(AcDb::kForWrite);
+			const TCHAR* strBlockName{ L"Employee" };
 
-	}
+			if (cBlockTable.Get()->has(strBlockName)) {
+				acutPrintf(_T("\nWarning: %s block exists"), strBlockName);
+				return;
+			}
 
-	// Modal Command with pickfirst selection
-	// ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, MyGroup, MyPickFirst, MyPickFirstLocal, ACRX_CMD_MODAL | ACRX_CMD_USEPICKSET)
-	static void MyGroupMyPickFirst () {
-		ads_name result ;
-		int iRet =acedSSGet (ACRX_T("_I"), NULL, NULL, NULL, result) ;
-		if ( iRet == RTNORM )
-		{
-			// There are selected entities
-			// Put your command using pickfirst set code here
+			auto pBlockTableRecord{ std::make_unique<AcDbBlockTableRecord>() };
+			cBlockTable.Add(pBlockTableRecord);
+
+			pBlockTableRecord->setOrigin(AcGePoint3d::kOrigin);
+			pBlockTableRecord->setName(strBlockName);
+
+
+
+
 		}
-		else
-		{
-			// There are no selected entities
-			// Put your command code here
+		catch (const std::exception& e) {
+			acutPrintf(_T("\nException: %s"), e.what());
 		}
 	}
-
-	// Application Session Command with localized name
-	// ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, MyGroup, MySessionCmd, MySessionCmdLocal, ACRX_CMD_MODAL | ACRX_CMD_SESSION)
-	static void MyGroupMySessionCmd () {
-		// Put your command code here
-	}
-
-	// The ACED_ADSFUNCTION_ENTRY_AUTO / ACED_ADSCOMMAND_ENTRY_AUTO macros can be applied to any static member 
-	// function of the CStep03App class.
-	// The function may or may not take arguments and have to return RTNORM, RTERROR, RTCAN, RTFAIL, RTREJ to AutoCAD, but use
-	// acedRetNil, acedRetT, acedRetVoid, acedRetInt, acedRetReal, acedRetStr, acedRetPoint, acedRetName, acedRetList, acedRetVal to return
-	// a value to the Lisp interpreter.
-	//
-	// NOTE: ACED_ADSFUNCTION_ENTRY_AUTO / ACED_ADSCOMMAND_ENTRY_AUTO has overloads where you can provide resourceid.
-	
-	//- ACED_ADSFUNCTION_ENTRY_AUTO(classname, name, regFunc) - this example
-	//- ACED_ADSSYMBOL_ENTRYBYID_AUTO(classname, name, nameId, regFunc) - only differs that it creates a localized name using a string in the resource file
-	//- ACED_ADSCOMMAND_ENTRY_AUTO(classname, name, regFunc) - a Lisp command (prefix C:)
-	//- ACED_ADSCOMMAND_ENTRYBYID_AUTO(classname, name, nameId, regFunc) - only differs that it creates a localized name using a string in the resource file
-
-	// Lisp Function is similar to ARX Command but it creates a lisp 
-	// callable function. Many return types are supported not just string
-	// or integer.
-	// ACED_ADSFUNCTION_ENTRY_AUTO(CStep03App, MyLispFunction, false)
-	static int ads_MyLispFunction () {
-		//struct resbuf *args =acedGetArgs () ;
-		
-		// Put your command code here
-
-		//acutRelRb (args) ;
-		
-		// Return a value to the AutoCAD Lisp Interpreter
-		// acedRetNil, acedRetT, acedRetVoid, acedRetInt, acedRetReal, acedRetStr, acedRetPoint, acedRetName, acedRetList, acedRetVal
-
-		return (RTNORM) ;
-	}
-	
 } ;
 
 //-----------------------------------------------------------------------------
 IMPLEMENT_ARX_ENTRYPOINT(CStep03App)
 
-ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, MyGroup, MyCommand, MyCommandLocal, ACRX_CMD_MODAL, NULL)
-ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, MyGroup, MyPickFirst, MyPickFirstLocal, ACRX_CMD_MODAL | ACRX_CMD_USEPICKSET, NULL)
-ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, MyGroup, MySessionCmd, MySessionCmdLocal, ACRX_CMD_MODAL | ACRX_CMD_SESSION, NULL)
-ACED_ADSSYMBOL_ENTRY_AUTO(CStep03App, MyLispFunction, false)
+ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, Step03, _createBlockRecord, createBlockRecord, ACRX_CMD_TRANSPARENT, NULL)
 
