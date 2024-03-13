@@ -25,6 +25,7 @@
 #include "StdAfx.h"
 #include "resource.h"
 #include "utilities.h"
+#include <stdexcept>
 
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("")
@@ -72,11 +73,10 @@ public:
 			}
 
 			auto pBTRecord{ std::make_unique<AcDbBlockTableRecord>() };
-			BlockTableRecordWrapper BTRecord(pBTRecord.get());
+			BlockTableRecordWrapper BTRecord(BTable.Add(pBTRecord));
+
 			BTRecord.Get()->setOrigin(AcGePoint3d::kOrigin);
 			BTRecord.Get()->setName(strBlockName);
-			
-			BTable.Add(pBTRecord);
 
 			std::unique_ptr<AcDbEntity> face{ std::make_unique<AcDbCircle>
 				(AcGePoint3d::kOrigin, AcGeVector3d::kZAxis, 1.0) };

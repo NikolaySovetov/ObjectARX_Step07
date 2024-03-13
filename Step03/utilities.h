@@ -11,7 +11,8 @@ public:
 	BlockTableWrapper(AcDb::OpenMode mode);
 	~BlockTableWrapper();
 	AcDbBlockTable* Get();
-	void Add(std::unique_ptr<AcDbBlockTableRecord>& cBlockTableRecord);
+	AcDbBlockTableRecord* 
+		Add(std::unique_ptr<AcDbBlockTableRecord>& cBlockTableRecord);
 };
 
 class BlockTableRecordWrapper {

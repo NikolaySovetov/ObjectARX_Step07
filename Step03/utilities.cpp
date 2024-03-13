@@ -23,11 +23,14 @@ AcDbBlockTable* BlockTableWrapper::Get() {
 	return m_pBlockTable;
 }
 
-void BlockTableWrapper::Add(std::unique_ptr<AcDbBlockTableRecord>& cBlockTableRecord) {
+AcDbBlockTableRecord* 
+BlockTableWrapper::Add(std::unique_ptr<AcDbBlockTableRecord>& cBlockTableRecord) {
 	if (m_pBlockTable->add(cBlockTableRecord.get()) != Acad::eOk) {
 		throw std::runtime_error("Can't add BlockTableRecord to BlockTable");
 	}
+	AcDbBlockTableRecord* ptr{ cBlockTableRecord.get() };
 	cBlockTableRecord.release();
+	return ptr;
 }
 
 //----------------------------------------------------------
