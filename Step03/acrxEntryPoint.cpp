@@ -74,14 +74,31 @@ public:
 
 			auto pBTRecord{ std::make_unique<AcDbBlockTableRecord>() };
 			BlockTableRecordWrapper BTRecord(pBTRecord.get());
-			BTable.Add(pBTRecord);
-
 			BTRecord.Get()->setOrigin(AcGePoint3d::kOrigin);
 			BTRecord.Get()->setName(strBlockName);
+			
+			BTable.Add(pBTRecord);
 
+			std::unique_ptr<AcDbEntity> face{ std::make_unique<AcDbCircle>
+				(AcGePoint3d::kOrigin, AcGeVector3d::kZAxis, 1.0) };
+			face->setColorIndex(2);
+			BTRecord.Add(face);
+			
+			std::unique_ptr<AcDbEntity> rightEye{ std::make_unique<AcDbCircle>
+				(AcGePoint3d(0.33, 0.25, 0), AcGeVector3d::kZAxis, 0.1) };
+			rightEye->setColorIndex(4);
+			BTRecord.Add(rightEye);
 
+			std::unique_ptr<AcDbEntity> leftEye{ std::make_unique<AcDbCircle>
+				(AcGePoint3d(-0.33, 0.25, 0), AcGeVector3d::kZAxis, 0.1) };
+			leftEye->setColorIndex(4);
+			BTRecord.Add(leftEye);
 
-		
+			const double pi{ 3.1415926 };
+			std::unique_ptr<AcDbEntity> mouth{ std::make_unique<AcDbArc>
+				(AcGePoint3d(0.0, 0.5, 0.0), AcGeVector3d::kZAxis, 1.0, pi + pi*0.3, pi + pi * 0.7) };
+			mouth->setColorIndex(1);
+			BTRecord.Add(mouth);
 
 		}
 		catch (const std::exception& e) {
