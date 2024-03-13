@@ -62,6 +62,13 @@ public:
 	virtual void RegisterServerComponents () {
 	}
 
+	static void Step03_createTest() {
+		ObjectWrapper ow;
+		AcDbBlockTable* pBTable = ow.GetBlockTable(AcDb::kForWrite);
+		AcDbLayerTable* pLTable = ow.GetLayerTable(AcDb::kForWrite);
+
+	}
+
 	static void Step03_createBlockRecord() {
 		try	{
 			BlockTableWrapper BTable(AcDb::kForWrite);
@@ -109,4 +116,5 @@ public:
 IMPLEMENT_ARX_ENTRYPOINT(CStep03App)
 
 ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, Step03, _createBlockRecord, createBlockRecord, ACRX_CMD_TRANSPARENT, NULL)
+ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, Step03, _createTest, createTest, ACRX_CMD_TRANSPARENT, NULL)
 

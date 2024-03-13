@@ -3,6 +3,32 @@
 #include <exception>
 #include <stdexcept>
 
+LayerTableWrapper::LayerTableWrapper(AcDb::OpenMode mode) {
+	if (acdbHostApplicationServices()->workingDatabase()->getLayerTable(m_pLayerTable, mode)
+		!= Acad::eOk) {
+		throw std::runtime_error("Can't open LayerTable");
+	}
+}
+
+LayerTableWrapper::~LayerTableWrapper() {
+	if (m_pLayerTable) {
+		m_pLayerTable->close();
+	}
+}
+
+AcDbLayerTable* LayerTableWrapper::Get() {
+	return m_pLayerTable;
+}
+
+AcDbLayerTableRecord* 
+LayerTableWrapper::Add(std::unique_ptr<AcDbLayerTableRecord>& pLayerTableRecord) {
+	if (m_pLayerTable->add(pLayerTableRecord.get()) != Acad::eOk) {
+		throw std::runtime_error("Can't add BlockTableRecord to BlockTable");
+	}
+	AcDbLayerTableRecord* ptr{ pLayerTableRecord.get() };
+	pLayerTableRecord.release();
+	return ptr;
+}
 
 
 //----------------------------------------------------------
@@ -24,12 +50,12 @@ AcDbBlockTable* BlockTableWrapper::Get() {
 }
 
 AcDbBlockTableRecord* 
-BlockTableWrapper::Add(std::unique_ptr<AcDbBlockTableRecord>& cBlockTableRecord) {
-	if (m_pBlockTable->add(cBlockTableRecord.get()) != Acad::eOk) {
+BlockTableWrapper::Add(std::unique_ptr<AcDbBlockTableRecord>& pBlockTableRecord) {
+	if (m_pBlockTable->add(pBlockTableRecord.get()) != Acad::eOk) {
 		throw std::runtime_error("Can't add BlockTableRecord to BlockTable");
 	}
-	AcDbBlockTableRecord* ptr{ cBlockTableRecord.get() };
-	cBlockTableRecord.release();
+	AcDbBlockTableRecord* ptr{ pBlockTableRecord.get() };
+	pBlockTableRecord.release();
 	return ptr;
 }
 
