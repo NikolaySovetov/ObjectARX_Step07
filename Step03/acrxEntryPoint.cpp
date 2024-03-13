@@ -64,22 +64,24 @@ public:
 
 	static void Step03_createBlockRecord() {
 		try	{
-			BlockTableWrapper cBlockTable(AcDb::kForWrite);
+			BlockTableWrapper BTable(AcDb::kForWrite);
 			const TCHAR* strBlockName{ L"Employee" };
 
-			if (cBlockTable.Get()->has(strBlockName)) {
+			if (BTable.Get()->has(strBlockName)) {
 				acutPrintf(_T("\nWarning: %s block exists"), strBlockName);
 				return;
 			}
 
-			auto pBlockTableRecord{ std::make_unique<AcDbBlockTableRecord>() };
-			cBlockTable.Add(pBlockTableRecord);
+			auto pBTRecord{ std::make_unique<AcDbBlockTableRecord>() };
+			BlockTableRecordWrapper BTRecord(pBTRecord.get());
+			BTable.Add(pBTRecord);
 
-			pBlockTableRecord->setOrigin(AcGePoint3d::kOrigin);
-			pBlockTableRecord->setName(strBlockName);
+			BTRecord.Get()->setOrigin(AcGePoint3d::kOrigin);
+			BTRecord.Get()->setName(strBlockName);
 
 
 
+		
 
 		}
 		catch (const std::exception& e) {
