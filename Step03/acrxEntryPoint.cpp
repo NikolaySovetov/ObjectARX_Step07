@@ -25,7 +25,6 @@
 #include "StdAfx.h"
 #include "resource.h"
 #include "utilities.h"
-#include <memory>
 
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("")
@@ -83,7 +82,7 @@ public:
 				(AcGePoint3d::kOrigin, AcGeVector3d::kZAxis, 1.0) };
 			face->setColorIndex(2);
 			BTRecord.Add(face);
-			
+
 			std::unique_ptr<AcDbEntity> rightEye{ std::make_unique<AcDbCircle>
 				(AcGePoint3d(0.33, 0.25, 0), AcGeVector3d::kZAxis, 0.1) };
 			rightEye->setColorIndex(4);
@@ -99,7 +98,6 @@ public:
 				(AcGePoint3d(0.0, 0.5, 0.0), AcGeVector3d::kZAxis, 1.0, pi + pi*0.3, pi + pi * 0.7) };
 			mouth->setColorIndex(1);
 			BTRecord.Add(mouth);
-
 		}
 		catch (const std::exception& e) {
 			acutPrintf(_T("\nException: %s"), e.what());

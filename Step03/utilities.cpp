@@ -1,6 +1,9 @@
 #include "StdAfx.h"
 #include "utilities.h"
+#include <exception>
 #include <stdexcept>
+
+
 
 //----------------------------------------------------------
 BlockTableWrapper::BlockTableWrapper(AcDb::OpenMode mode) {
