@@ -3,33 +3,42 @@
 #include <exception>
 #include <stdexcept>
 
-LayerTableWrapper::LayerTableWrapper(AcDb::OpenMode mode) {
-	if (acdbHostApplicationServices()->workingDatabase()->getLayerTable(m_pLayerTable, mode)
+ObjectOpenCloseWrapper::ObjectOpenCloseWrapper()
+	: m_pObject{ nullptr } {}
+
+ObjectOpenCloseWrapper::~ObjectOpenCloseWrapper() {
+	if (m_pObject) {
+		m_pObject->close();
+	}
+}
+
+AcDbBlockTable* ObjectOpenCloseWrapper::GetBlockTable(AcDb::OpenMode mode) {
+	isOccupied();
+	AcDbBlockTable* pBlockTable;
+	if (acdbHostApplicationServices()->workingDatabase()->getBlockTable(pBlockTable, mode)
 		!= Acad::eOk) {
-		throw std::runtime_error("Can't open LayerTable");
+		throw std::runtime_error("Can't open BlockTable");
+	}
+	m_pObject = pBlockTable;
+	return pBlockTable;
+}
+
+AcDbLayerTable* ObjectOpenCloseWrapper::GetLayerTable(AcDb::OpenMode mode) {
+	isOccupied();
+	AcDbLayerTable* pLayerTable;
+	if (acdbHostApplicationServices()->workingDatabase()->getLayerTable(pLayerTable, mode)
+		!= Acad::eOk) {
+		throw std::runtime_error("Can't open BlockTable");
+	}
+	m_pObject = pLayerTable;
+	return pLayerTable;
+}
+
+void ObjectOpenCloseWrapper::isOccupied() {
+	if (m_pObject) {
+		throw std::runtime_error("Attempt to redefine ObjectOpenCloseWrapper");
 	}
 }
-
-LayerTableWrapper::~LayerTableWrapper() {
-	if (m_pLayerTable) {
-		m_pLayerTable->close();
-	}
-}
-
-AcDbLayerTable* LayerTableWrapper::Get() {
-	return m_pLayerTable;
-}
-
-AcDbLayerTableRecord* 
-LayerTableWrapper::Add(std::unique_ptr<AcDbLayerTableRecord>& pLayerTableRecord) {
-	if (m_pLayerTable->add(pLayerTableRecord.get()) != Acad::eOk) {
-		throw std::runtime_error("Can't add BlockTableRecord to BlockTable");
-	}
-	AcDbLayerTableRecord* ptr{ pLayerTableRecord.get() };
-	pLayerTableRecord.release();
-	return ptr;
-}
-
 
 //----------------------------------------------------------
 BlockTableWrapper::BlockTableWrapper(AcDb::OpenMode mode) {
