@@ -29,8 +29,11 @@
 //-----------------------------------------------------------------------------
 //----- Here you can store the document / database related data.
 class CDocData {
-
-	//----- TODO: here you can add your variables
+private:
+	bool m_editCommand;
+	bool m_doResponsioning;
+	AcDbObjectIdArray m_changedObjects;
+	AcGePoint3dArray m_employeePositions;
 
 public:
 	CDocData () ;

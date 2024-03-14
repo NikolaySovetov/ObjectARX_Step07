@@ -32,10 +32,14 @@ AcApDataManager<CDocData> DocVars ;
 //-----------------------------------------------------------------------------
 //----- Implementation of the document data class.
 CDocData::CDocData () {
+	m_editCommand = false;
+	m_doResponsioning = false;
 }
 
 //-----------------------------------------------------------------------------
 CDocData::CDocData (const CDocData &data) {
+	m_changedObjects = data.m_changedObjects;
+	m_employeePositions = data.m_employeePositions;
 }
 
 //-----------------------------------------------------------------------------
