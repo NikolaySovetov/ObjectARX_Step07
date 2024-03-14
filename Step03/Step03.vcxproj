@@ -74,6 +74,7 @@
     <ClCompile Include="acrxEntryPoint.cpp" />
     <ClCompile Include="DocData.cpp" />
     <ClCompile Include="EdEmployeeReactor.cpp" />
+    <ClCompile Include="ObEmployeeReactor.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -84,6 +85,7 @@
   <ItemGroup>
     <ClInclude Include="DocData.h" />
     <ClInclude Include="EdEmployeeReactor.h" />
+    <ClInclude Include="ObEmployeeReactor.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="utilities.h" />

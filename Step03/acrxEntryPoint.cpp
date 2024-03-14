@@ -31,6 +31,7 @@
 #define szRDS _RXST("")
 
 EdEmployeeReactor* pEdEmployeeReactor = nullptr;
+ObEmployeeReactor* pObEmployeeReactor = nullptr;
 
 
 //-----------------------------------------------------------------------------
@@ -48,6 +49,7 @@ public:
 
 		// TODO: Add your initialization code here
 		pEdEmployeeReactor = new EdEmployeeReactor(true);
+		pObEmployeeReactor = new ObEmployeeReactor;
 
 		return (retCode);
 	}
@@ -60,6 +62,7 @@ public:
 
 		// TODO: Unload dependencies here
 		delete pEdEmployeeReactor;
+		delete pObEmployeeReactor;
 
 		return (retCode);
 	}

@@ -61,6 +61,7 @@
 extern AcApDataManager<CDocData> DocVars;
 
 #include "EdEmployeeReactor.h"
+#include "ObEmployeeReactor.h"
 
 
 

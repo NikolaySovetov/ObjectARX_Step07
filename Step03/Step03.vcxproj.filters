@@ -33,6 +33,9 @@
     <ClCompile Include="EdEmployeeReactor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ObEmployeeReactor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StdAfx.h">
@@ -48,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EdEmployeeReactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObEmployeeReactor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
