@@ -35,126 +35,87 @@
 class CStep03App : public AcRxArxApp {
 
 public:
-	CStep03App () : AcRxArxApp () {}
+	CStep03App() : AcRxArxApp() {}
 
-	virtual AcRx::AppRetCode On_kInitAppMsg (void *pkt) {
+	virtual AcRx::AppRetCode On_kInitAppMsg(void* pkt) {
 		// TODO: Load dependencies here
 
 		// You *must* call On_kInitAppMsg here
-		AcRx::AppRetCode retCode =AcRxArxApp::On_kInitAppMsg (pkt) ;
-		
+		AcRx::AppRetCode retCode = AcRxArxApp::On_kInitAppMsg(pkt);
+
 		// TODO: Add your initialization code here
 
-		return (retCode) ;
+		return (retCode);
 	}
 
-	virtual AcRx::AppRetCode On_kUnloadAppMsg (void *pkt) {
+	virtual AcRx::AppRetCode On_kUnloadAppMsg(void* pkt) {
 		// TODO: Add your code here
 
 		// You *must* call On_kUnloadAppMsg here
-		AcRx::AppRetCode retCode =AcRxArxApp::On_kUnloadAppMsg (pkt) ;
+		AcRx::AppRetCode retCode = AcRxArxApp::On_kUnloadAppMsg(pkt);
 
 		// TODO: Unload dependencies here
 
-		return (retCode) ;
+		return (retCode);
 	}
 
-	virtual void RegisterServerComponents () {
+	virtual void RegisterServerComponents() {
 	}
 
 	static void Step03_createBlock() {
-		const double pi{ 3.1415926 };
-		const TCHAR* strBlockName{ L"TEST" };
-
-		ObjectOpenCloseWrapper BTable;
-		AcDbBlockTable* pBTable = BTable.GetBlockTable(AcDb::kForWrite);
-
-		if (pBTable->has(strBlockName)) {
-			acutPrintf(_T("\nWarning: %s block exists"), strBlockName);
+		TCHAR strBlockName[128];
+		if (acedGetString(0, _T("Enter BlockRecord name: "), strBlockName) != RTNORM) {
 			return;
 		}
 
-		AcDbSymbolTableRecordPointer<AcDbBlockTableRecord> pBTRecord;
-		pBTRecord.create();
-		pBTRecord->setOrigin(AcGePoint3d{ 0, 0, 0 });
-		pBTRecord->setName(strBlockName);
-		if (pBTable->add(pBTRecord) != Acad::eOk) {
-			acutPrintf(L"\nError: Can't add BlockRecord to BlockTable");
-			return;
-		}
+		try {
+			ObjectOpenCloseWrapper BTable;
+			AcDbBlockTable* pBTable = BTable.GetBlockTable(AcDb::kForWrite);
 
-		AcDbObjectPointer<AcDbCircle> face;
-		face.create();
-		face->setCenter(AcGePoint3d::kOrigin);
-		face->setNormal(AcGeVector3d::kZAxis);
-		face->setRadius(1.0);
-		face->setColorIndex(2);
-		if (pBTRecord->appendAcDbEntity(face) != Acad::eOk) {
-			acutPrintf(L"\nError: Can't add Object to BlockRecord");
-			return;
-		}
+			if (pBTable->has(strBlockName)) {
+				acutPrintf(_T("\nWarning: %s block exists"), strBlockName);
+				return;
+			}
 
-		AcDbObjectPointer<AcDbCircle> rightEye;
-		rightEye.create();
-		rightEye->setCenter(AcGePoint3d(0.15, 0.20, 0));
-		rightEye->setNormal(AcGeVector3d::kZAxis);
-		rightEye->setRadius(0.05);
-		rightEye->setColorIndex(1);
-		if (pBTRecord->appendAcDbEntity(rightEye) != Acad::eOk) {
-			acutPrintf(L"\nError: Can't add Object to BlockRecord");
-			return;
-		};
-
-		AcDbObjectPointer<AcDbCircle> leftEye;
-		leftEye.create();
-		leftEye->setCenter(AcGePoint3d(-0.15, 0.30, 0));
-		leftEye->setNormal(AcGeVector3d::kZAxis);
-		leftEye->setRadius(0.05);
-		leftEye->setColorIndex(1);
-		if (pBTRecord->appendAcDbEntity(leftEye) != Acad::eOk) {
-			acutPrintf(L"\nError: Can't add Object to BlockRecord");
-			return;
+			AddEmployeeBlockRecord(pBTable, strBlockName);
 		}
-
-		AcDbObjectPointer<AcDbArc> mouth;
-		mouth.create();
-		mouth->setCenter(AcGePoint3d(0, 0.25, 0));
-		mouth->setNormal(AcGeVector3d::kZAxis);
-		mouth->setRadius(0.8);
-		mouth->setStartAngle(pi + pi*0.3);
-		mouth->setEndAngle(pi + pi*0.7);
-		mouth->setColorIndex(3);
-		if (pBTRecord->appendAcDbEntity(mouth) != Acad::eOk) {
-			acutPrintf(L"\nError: Can't add Object to BlockRecord");
-			return;
+		catch (const std::exception& e) {
+			acutPrintf(_T("\nException: %s"), e.what());
 		}
-	
 	}
 
 	static void Step03_createLayer() {
-		const TCHAR* strLayerName{ L"USER LAYER" };
-
-		ObjectOpenCloseWrapper layerTable;
-		AcDbLayerTable* pLayerTable = layerTable.GetLayerTable(AcDb::OpenMode::kForWrite);
-
-		if (pLayerTable->has(strLayerName)) {
-			acutPrintf(_T("\nWarning: %s layer exists"), strLayerName);
+		TCHAR strLayerName[128];
+		if (acedGetString(0, _T("Enter BlockRecord name: "), strLayerName) != RTNORM) {
 			return;
 		}
 
-		AcDbLayerTableRecordPointer pTRecord;
-		pTRecord.create();
-		pTRecord->setName(strLayerName);
-		if (pLayerTable->add(pTRecord) != Acad::eOk) {
-			acutPrintf(_T("\nError: Can't add %s layer"), strLayerName);
-			return;
+		try {
+			ObjectOpenCloseWrapper layerTable;
+			AcDbLayerTable* pLayerTable = layerTable.GetLayerTable(AcDb::OpenMode::kForWrite);
+
+			if (pLayerTable->has(strLayerName)) {
+				acutPrintf(_T("\nWarning: %s layer exists"), strLayerName);
+				return;
+			}
+
+			AcDbLayerTableRecordPointer pTRecord;
+			pTRecord.create();
+			pTRecord->setName(strLayerName);
+			if (pLayerTable->add(pTRecord) != Acad::eOk) {
+				acutPrintf(_T("\nError: Can't add %s layer"), strLayerName);
+				return;
+			}
+		}
+		catch (const std::exception& e) {
+			acutPrintf(_T("\nException: %s"), e.what());
 		}
 
 		acutPrintf(_T("\nEvent: %s layer created"), strLayerName);
 	}
 
 	static void Step03_createBlockRecord() {
-		try	{
+		try {
 			BlockTableWrapper BTable(AcDb::kForWrite);
 			const TCHAR* strBlockName{ L"Employee" };
 
@@ -186,7 +147,7 @@ public:
 
 			const double pi{ 3.1415926 };
 			std::unique_ptr<AcDbEntity> mouth{ std::make_unique<AcDbArc>
-				(AcGePoint3d(0.0, 0.5, 0.0), AcGeVector3d::kZAxis, 1.0, pi + pi*0.3, pi + pi * 0.7) };
+				(AcGePoint3d(0.0, 0.5, 0.0), AcGeVector3d::kZAxis, 1.0, pi + pi * 0.3, pi + pi * 0.7) };
 			mouth->setColorIndex(1);
 			BTRecord.Add(mouth);
 		}
@@ -194,7 +155,7 @@ public:
 			acutPrintf(_T("\nException: %s"), e.what());
 		}
 	}
-} ;
+};
 
 //-----------------------------------------------------------------------------
 IMPLEMENT_ARX_ENTRYPOINT(CStep03App)

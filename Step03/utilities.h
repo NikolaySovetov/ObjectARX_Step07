@@ -16,6 +16,8 @@ public:
 	void isOccupied();
 };
 
+void AddEmployeeBlockRecord(AcDbBlockTable* pBTable, const TCHAR* strBlockName);
+
 //----------------------------------------------------------
 class BlockTableWrapper {
 private:
