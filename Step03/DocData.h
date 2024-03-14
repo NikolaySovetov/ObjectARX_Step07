@@ -29,9 +29,9 @@
 //-----------------------------------------------------------------------------
 //----- Here you can store the document / database related data.
 class CDocData {
-private:
+public:
 	bool m_editCommand;
-	bool m_doResponsioning;
+	bool m_doRepositioning;
 	AcDbObjectIdArray m_changedObjects;
 	AcGePoint3dArray m_employeePositions;
 

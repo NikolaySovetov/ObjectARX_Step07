@@ -33,7 +33,7 @@ AcApDataManager<CDocData> DocVars ;
 //----- Implementation of the document data class.
 CDocData::CDocData () {
 	m_editCommand = false;
-	m_doResponsioning = false;
+	m_doRepositioning = false;
 }
 
 //-----------------------------------------------------------------------------

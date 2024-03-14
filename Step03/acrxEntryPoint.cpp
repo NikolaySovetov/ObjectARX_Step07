@@ -30,6 +30,9 @@
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("")
 
+EdEmployeeReactor* pEdEmployeeReactor = nullptr;
+
+
 //-----------------------------------------------------------------------------
 //----- ObjectARX EntryPoint
 class CStep03App : public AcRxArxApp {
@@ -44,6 +47,7 @@ public:
 		AcRx::AppRetCode retCode = AcRxArxApp::On_kInitAppMsg(pkt);
 
 		// TODO: Add your initialization code here
+		pEdEmployeeReactor = new EdEmployeeReactor(true);
 
 		return (retCode);
 	}
@@ -55,6 +59,7 @@ public:
 		AcRx::AppRetCode retCode = AcRxArxApp::On_kUnloadAppMsg(pkt);
 
 		// TODO: Unload dependencies here
+		delete pEdEmployeeReactor;
 
 		return (retCode);
 	}
@@ -155,6 +160,17 @@ public:
 			acutPrintf(_T("\nException: %s"), e.what());
 		}
 	}
+
+	static void Step03_createTest() {
+		TCHAR strBlockName[128];
+		if (acedGetString(0, _T("Enter text: "), strBlockName) != RTNORM) {
+			return;
+		}
+
+		int val = _tcscmp(L"TEST", strBlockName);
+		acutPrintf(_T("\nvalue = %d"), val);
+
+	}
 };
 
 //-----------------------------------------------------------------------------
@@ -163,4 +179,5 @@ IMPLEMENT_ARX_ENTRYPOINT(CStep03App)
 ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, Step03, _createBlockRecord, createBlockRecord, ACRX_CMD_TRANSPARENT, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, Step03, _createBlock, createBlock, ACRX_CMD_TRANSPARENT, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, Step03, _createLayer, createLayer, ACRX_CMD_TRANSPARENT, NULL)
+ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, Step03, _createTest, createTest, ACRX_CMD_TRANSPARENT, NULL)
 
