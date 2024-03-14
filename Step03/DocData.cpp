@@ -23,25 +23,140 @@
 //----- DocData.cpp : Implementation file
 //-----------------------------------------------------------------------------
 #include "StdAfx.h"
+#include "utilities.h"
 
 //-----------------------------------------------------------------------------
 //----- The one and only document manager object. You can use the DocVars object to retrieve
 //----- document specific data throughout your application
-AcApDataManager<CDocData> DocVars ;
+AcApDataManager<CDocData> DocVars;
 
 //-----------------------------------------------------------------------------
 //----- Implementation of the document data class.
-CDocData::CDocData () {
+CDocData::CDocData() {
 	m_editCommand = false;
 	m_doRepositioning = false;
+
+	attachEmployeeReactorToAllEmployee(true);
 }
 
 //-----------------------------------------------------------------------------
-CDocData::CDocData (const CDocData &data) {
+CDocData::CDocData(const CDocData& data) {
 	m_changedObjects = data.m_changedObjects;
 	m_employeePositions = data.m_employeePositions;
 }
 
 //-----------------------------------------------------------------------------
-CDocData::~CDocData () {
+CDocData::~CDocData() {
 }
+
+Acad::ErrorStatus attachEmployeeReactorToAllEmployee(bool attach) {
+	Acad::ErrorStatus es;
+
+	AcDbBlockTable* pBTable;
+	es = acdbHostApplicationServices()->workingDatabase()->getBlockTable(pBTable, AcDb::kForRead);
+	if (es != Acad::eOk) {
+		acutPrintf(L"\nError: Can't open BlockTable");
+		return es;
+	}
+
+	AcDbBlockTableRecord* pBTRecordForModelSpace;
+	es = pBTable->getAt(ACDB_MODEL_SPACE, pBTRecordForModelSpace, AcDb::kForRead);
+	if (es != Acad::eOk) {
+		acutPrintf(L"\nError: Can't get BlockTableRecord for MODEL_SPACE");
+		return es;
+	}
+
+	AcDbBlockTableRecordIterator* pIterator;
+	es = pBTRecordForModelSpace->newIterator(pIterator);
+	if (es != Acad::eOk) {
+		acutPrintf(L"\nError: Can't create new iterator of BlockTableRecord");
+		return es;
+	}
+	std::unique_ptr<AcDbBlockTableRecordIterator>pBTRIterator(pIterator);
+
+
+	for (; !pBTRIterator->done(); pBTRIterator->step()) {
+		AcDbEntity* pEntity;
+
+		es = pBTRIterator->getEntity(pEntity, AcDb::kForRead);
+		if (es != Acad::eOk) {
+			acutPrintf(L"\nWarning: Can't get AcDbEntity from Iterator");
+			continue;
+		}
+
+		AcDbBlockReference* pBReference = AcDbBlockReference::cast(pEntity);
+		if (!pBReference) {
+			pEntity->close();
+			acutPrintf(L"\nEvent: Entity not the BlockReference");
+			continue;
+		}
+
+		AcDbObjectId objectId = pBReference->blockTableRecord();
+
+		AcDbBlockTableRecord* pBlockTableRecord;
+		es = acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, objectId, AcDb::kForRead);
+		if (es != Acad::eOk) {
+			acutPrintf(_T("\nCannot open block table record!"));
+			pEntity->close();
+			break;
+		}
+
+		const TCHAR* strBlockName;
+		pBlockTableRecord->getName(strBlockName);
+		pBlockTableRecord->close();
+
+		if (_tcscmp(strBlockName, _T("EMPLOYEE"))) {
+			pEntity->close();
+			continue;
+		}
+
+		if (attach) {
+			pEntity->addReactor(pObEmployeeReactor);
+		}
+		else {
+			pEntity->removeReactor(pObEmployeeReactor);
+		}
+		pEntity->close();
+	}
+
+	pBTRecordForModelSpace->close();
+
+	return Acad::eOk;
+}
+
+void detachAllEmployeeReactors() {
+	AcApDocumentIterator* pIterator = acDocManager->newAcApDocumentIterator();
+	if (pIterator == NULL) {
+		return;
+	}
+	std::unique_ptr<AcApDocumentIterator> pDocIterator(pIterator);
+
+	AcApDocument* pOldDoc = acDocManager->curDocument();
+
+
+	for (; !pIterator->done(); pIterator->step()) {
+		AcApDocument* pDoc = pIterator->document();
+		if (pDoc->lockMode() == AcAp::kNone) {
+			if (acDocManager->setCurDocument(pDoc, AcAp::kAutoWrite, Adesk::kFalse) == Acad::eOk) {
+				attachEmployeeReactorToAllEmployee(false);
+				acDocManager->unlockDocument(pDoc);
+			}
+		}
+		else {
+			acDocManager->setCurDocument(pDoc);
+			attachEmployeeReactorToAllEmployee(false);
+		}
+	}
+
+	acDocManager->setCurDocument(pOldDoc, AcAp::kNone, Adesk::kFalse);
+}
+
+
+
+
+
+
+
+
+
+

@@ -41,3 +41,9 @@ public:
 	~CDocData () ;
 
 } ;
+
+Acad::ErrorStatus attachEmployeeReactorToAllEmployee(bool attach);
+void detachAllEmployeeReactors();
+
+
+

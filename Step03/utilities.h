@@ -1,7 +1,6 @@
 #pragma once
 #include "StdAfx.h"
 #include <memory>
-#include <vector>
 
 class ObjectOpenCloseWrapper {
 private:
