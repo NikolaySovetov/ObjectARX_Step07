@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="acrxEntryPoint.cpp" />
+    <ClCompile Include="DbEmployeeReactor.cpp" />
     <ClCompile Include="DocData.cpp" />
     <ClCompile Include="EdEmployeeReactor.cpp" />
     <ClCompile Include="ObEmployeeReactor.cpp" />
@@ -83,6 +84,7 @@
     <ClCompile Include="utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DbEmployeeReactor.h" />
     <ClInclude Include="DocData.h" />
     <ClInclude Include="EdEmployeeReactor.h" />
     <ClInclude Include="ObEmployeeReactor.h" />

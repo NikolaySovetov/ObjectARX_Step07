@@ -25,7 +25,7 @@
 //----- See the AsdkDmgr.h / DocData.cpp for more datails
 //-----------------------------------------------------------------------------
 #pragma once
-
+#include "DbEmployeeReactor.h"
 //-----------------------------------------------------------------------------
 //----- Here you can store the document / database related data.
 class CDocData {
@@ -34,6 +34,7 @@ public:
 	bool m_doRepositioning;
 	AcDbObjectIdArray m_changedObjects;
 	AcGePoint3dArray m_employeePositions;
+	DbEmployeeReactor* m_pDbEmlpoyeeReactor;
 
 public:
 	CDocData () ;

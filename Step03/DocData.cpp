@@ -125,11 +125,11 @@ Acad::ErrorStatus attachEmployeeReactorToAllEmployee(bool attach) {
 }
 
 void detachAllEmployeeReactors() {
-	AcApDocumentIterator* pDocIterator = acDocManager->newAcApDocumentIterator();
-	if (pDocIterator == NULL) {
+	AcApDocumentIterator* pDocIt = acDocManager->newAcApDocumentIterator();
+	if (pDocIt == NULL) {
 		return;
 	}
-	std::unique_ptr<AcApDocumentIterator> pDocIterator(pDocIterator);
+	std::unique_ptr<AcApDocumentIterator> pDocIterator(pDocIt);
 
 	AcApDocument* pCurrentDocContext = acDocManager->curDocument();
 
