@@ -98,8 +98,9 @@ void AddEmployeeBlockRecord(AcDbBlockTable* pBTable, const TCHAR* strBlockName) 
 
 //----------------------------------------------------------
 BlockTableWrapper::BlockTableWrapper(AcDb::OpenMode mode) {
-	if (acdbHostApplicationServices()->workingDatabase()->getBlockTable(m_pBlockTable, mode)
-		!= Acad::eOk) {
+	Acad::ErrorStatus es;
+	es = acdbHostApplicationServices()->workingDatabase()->getBlockTable(m_pBlockTable, mode);
+	if (es != Acad::eOk) {
 		throw std::runtime_error("Can't open BlockTable");
 	}
 }

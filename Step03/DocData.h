@@ -30,17 +30,16 @@
 //----- Here you can store the document / database related data.
 class CDocData {
 public:
-	bool m_editCommand;
-	bool m_doRepositioning;
-	AcDbObjectIdArray m_changedObjects;
-	AcGePoint3dArray m_employeePositions;
-	DbEmployeeReactor* m_pDbEmlpoyeeReactor;
+	bool m_editCommand{};
+	bool m_doRepositioning{};
+	AcDbObjectIdArray m_changedObjects{};
+	AcGePoint3dArray m_employeePositions{};
+	DbEmployeeReactor* m_pDbEmlpoyeeReactor{};
 
 public:
 	CDocData () ;
 	CDocData (const CDocData &data) ;
 	~CDocData () ;
-
 } ;
 
 Acad::ErrorStatus attachEmployeeReactorToAllEmployee(bool attach);

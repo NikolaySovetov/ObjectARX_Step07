@@ -24,7 +24,7 @@
 //-----------------------------------------------------------------------------
 #pragma once
 
-#ifdef STEP07_MODULE
+#ifdef STEP03_MODULE
 #define DLLIMPEXP __declspec(dllexport)
 #else
 //----- Note: we don't use __declspec(dllimport) here, because of the
@@ -41,7 +41,7 @@
 //----- the ctor. And, since we expect the server dll to remain in
 //----- memory indefinitely, there is no problem with vtables unexpectedly
 //----- going away.
-//#define DLLIMPEXP
+#define DLLIMPEXP
 #endif
 
 //-----------------------------------------------------------------------------
@@ -68,10 +68,10 @@ public:
 	virtual AcDbDatabase* Subject() const;
 	virtual bool IsAttached() const;
     
-	void objectAppended(const AcDbDatabase*, const AcDbObject* pObject);
+	virtual void objectAppended(const AcDbDatabase*, const AcDbObject* pObject);
 
 };
 
-#ifdef STEP07_MODULE
+#ifdef STEP03_MODULE
 ACDB_REGISTER_OBJECT_ENTRY_AUTO(DbEmployeeReactor)
 #endif

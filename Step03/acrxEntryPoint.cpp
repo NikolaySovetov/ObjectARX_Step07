@@ -171,12 +171,17 @@ public:
 			return;
 		}
 
-		int val = _tcscmp(L"TEST", strBlockName);
+		int val = _tcscmp(_T("TEST"), strBlockName);
 		acutPrintf(_T("\nvalue = %d"), val);
 
 	}
 
-	virtual AcRx::AppRetCode On_kLoadDwgMsg(void* pkt);
+	virtual AcRx::AppRetCode On_kLoadDwgMsg(void* pkt) {
+		AcRx::AppRetCode retCode = AcRxArxApp::On_kLoadDwgMsg(pkt);
+
+		DocVars.docData().m_pDbEmlpoyeeReactor = new DbEmployeeReactor(acdbHostApplicationServices()->workingDatabase());
+		return retCode;
+	}
 
 };
 
@@ -187,11 +192,3 @@ ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, Step03, _createBlockRecord, createBlockRe
 ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, Step03, _createBlock, createBlock, ACRX_CMD_TRANSPARENT, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, Step03, _createLayer, createLayer, ACRX_CMD_TRANSPARENT, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, Step03, _createTest, createTest, ACRX_CMD_TRANSPARENT, NULL)
-
-AcRx::AppRetCode CStep03App::On_kLoadDwgMsg(void* pkt) {
-	AcRx::AppRetCode retCode = AcRxArxApp::On_kLoadDwgMsg(pkt);
-
-	DocVars.docData().m_pDbEmlpoyeeReactor = new DbEmployeeReactor(acdbHostApplicationServices()->workingDatabase());
-	return (retCode);
-}
-

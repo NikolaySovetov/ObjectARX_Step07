@@ -38,7 +38,7 @@
     <ProjectGuid>{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}</ProjectGuid>
     <!--For Visual Studio 2019, you can specify the most recent version of the Windows 10 SDK by using a value of 10.0-->
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Step07</ProjectName>
+    <ProjectName>Step03</ProjectName>
   </PropertyGroup>
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>

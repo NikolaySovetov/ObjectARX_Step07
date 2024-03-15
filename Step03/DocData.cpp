@@ -33,16 +33,14 @@ AcApDataManager<CDocData> DocVars;
 //-----------------------------------------------------------------------------
 //----- Implementation of the document data class.
 CDocData::CDocData() {
-	m_editCommand = false;
-	m_doRepositioning = false;
+	//m_editCommand = false;
+	//m_doRepositioning = false;
 
 	attachEmployeeReactorToAllEmployee(true);
 }
 
 //-----------------------------------------------------------------------------
 CDocData::CDocData(const CDocData& data) {
-	m_changedObjects = data.m_changedObjects;
-	m_employeePositions = data.m_employeePositions;
 }
 
 //-----------------------------------------------------------------------------
@@ -58,9 +56,13 @@ Acad::ErrorStatus attachEmployeeReactorToAllEmployee(bool attach) {
 		acutPrintf(L"\nError: Can't open BlockTable");
 		return es;
 	}
+//	AcDbSymbolTablePointer<AcDbBlockTable> stp;
+//	stp.acquire(pBTable);
 
 	AcDbBlockTableRecord* pBTRecordForModelSpace;
 	es = pBTable->getAt(ACDB_MODEL_SPACE, pBTRecordForModelSpace, AcDb::kForRead);
+	pBTable->close();
+
 	if (es != Acad::eOk) {
 		acutPrintf(L"\nError: Can't get BlockTableRecord for MODEL_SPACE");
 		return es;
