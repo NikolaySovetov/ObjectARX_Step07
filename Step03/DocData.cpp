@@ -125,17 +125,17 @@ Acad::ErrorStatus attachEmployeeReactorToAllEmployee(bool attach) {
 }
 
 void detachAllEmployeeReactors() {
-	AcApDocumentIterator* pIterator = acDocManager->newAcApDocumentIterator();
-	if (pIterator == NULL) {
+	AcApDocumentIterator* pDocIterator = acDocManager->newAcApDocumentIterator();
+	if (pDocIterator == NULL) {
 		return;
 	}
-	std::unique_ptr<AcApDocumentIterator> pDocIterator(pIterator);
+	std::unique_ptr<AcApDocumentIterator> pDocIterator(pDocIterator);
 
-	AcApDocument* pOldDoc = acDocManager->curDocument();
+	AcApDocument* pCurrentDocContext = acDocManager->curDocument();
 
 
-	for (; !pIterator->done(); pIterator->step()) {
-		AcApDocument* pDoc = pIterator->document();
+	for (; !pDocIterator->done(); pDocIterator->step()) {
+		AcApDocument* pDoc = pDocIterator->document();
 		if (pDoc->lockMode() == AcAp::kNone) {
 			if (acDocManager->setCurDocument(pDoc, AcAp::kAutoWrite, Adesk::kFalse) == Acad::eOk) {
 				attachEmployeeReactorToAllEmployee(false);
@@ -148,7 +148,7 @@ void detachAllEmployeeReactors() {
 		}
 	}
 
-	acDocManager->setCurDocument(pOldDoc, AcAp::kNone, Adesk::kFalse);
+	acDocManager->setCurDocument(pCurrentDocContext, AcAp::kNone, Adesk::kFalse);
 }
 
 

@@ -61,6 +61,7 @@ public:
 		AcRx::AppRetCode retCode = AcRxArxApp::On_kUnloadAppMsg(pkt);
 
 		// TODO: Unload dependencies here
+		detachAllEmployeeReactors();
 		delete pEdEmployeeReactor;
 		delete pObEmployeeReactor;
 
