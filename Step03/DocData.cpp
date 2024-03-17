@@ -107,7 +107,7 @@ Acad::ErrorStatus attachEmployeeReactorToAllEmployee(bool attach) {
 		pBlockTableRecord->getName(strBlockName);
 		pBlockTableRecord->close();
 
-		if (_tcscmp(strBlockName, _T("EMPLOYEE"))) {
+		if (_tcscmp(strBlockName, _T("EMPLOYEE")) != 0) {
 			pEntity->close();
 			continue;
 		}

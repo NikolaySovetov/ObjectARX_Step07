@@ -32,9 +32,9 @@ class CDocData {
 public:
 	bool m_editCommand{};
 	bool m_doRepositioning{};
+	DbEmployeeReactor* m_pDbEmlpoyeeReactor{};
 	AcDbObjectIdArray m_changedObjects{};
 	AcGePoint3dArray m_employeePositions{};
-	DbEmployeeReactor* m_pDbEmlpoyeeReactor{};
 
 public:
 	CDocData () ;

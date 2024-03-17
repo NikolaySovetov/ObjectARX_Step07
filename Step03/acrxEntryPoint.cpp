@@ -126,7 +126,7 @@ public:
 	static void Step03_createBlockRecord() {
 		try {
 			BlockTableWrapper BTable(AcDb::kForWrite);
-			const TCHAR* strBlockName{ L"Employee" };
+			const TCHAR* strBlockName{ L"EMPLOYEE" };
 
 			if (BTable.Get()->has(strBlockName)) {
 				acutPrintf(_T("\nWarning: %s block exists"), strBlockName);
@@ -179,7 +179,8 @@ public:
 	virtual AcRx::AppRetCode On_kLoadDwgMsg(void* pkt) {
 		AcRx::AppRetCode retCode = AcRxArxApp::On_kLoadDwgMsg(pkt);
 
-		DocVars.docData().m_pDbEmlpoyeeReactor = new DbEmployeeReactor(acdbHostApplicationServices()->workingDatabase());
+		DocVars.docData().m_pDbEmlpoyeeReactor = 
+			new DbEmployeeReactor(acdbHostApplicationServices()->workingDatabase());
 		return retCode;
 	}
 

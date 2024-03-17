@@ -62,7 +62,7 @@ void ObEmployeeReactor::openedForModify(const AcDbObject* pObject) {
 	pBTRecord->close();
 
 	if (_tcscmp(L"EMPLOYEE", strBlockName) != 0) {
-		acutPrintf(L"\nCan't open block table record!");
+		acutPrintf(L"\nObject is not \"Employee\"");
 		return;
 	}
 
