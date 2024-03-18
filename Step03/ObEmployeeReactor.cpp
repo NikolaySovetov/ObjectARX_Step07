@@ -29,8 +29,7 @@
 ACRX_CONS_DEFINE_MEMBERS(ObEmployeeReactor, AcDbObjectReactor, 1)
 
 //-----------------------------------------------------------------------------
-ObEmployeeReactor::ObEmployeeReactor (const TCHAR* strBlockName) : AcDbObjectReactor() {
-	m_strBlockName = strBlockName;
+ObEmployeeReactor::ObEmployeeReactor() : AcDbObjectReactor() {
 }
 
 //-----------------------------------------------------------------------------
@@ -62,7 +61,7 @@ void ObEmployeeReactor::openedForModify(const AcDbObject* pObject) {
 	pBTRecord->getName(strBlockName);
 	pBTRecord->close();
 
-	if (_tcscmp(m_strBlockName, strBlockName) != 0) {
+	if (_tcscmp(L"EMPLOYEE", strBlockName) != 0) {
 		acutPrintf(L"\nObject is not \"Employee\"");
 		return;
 	}

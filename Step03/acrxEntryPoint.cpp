@@ -49,7 +49,7 @@ public:
 
 		// TODO: Add your initialization code here
 		pEdEmployeeReactor = new EdEmployeeReactor(L"EMPLOYEE", true);
-		pObEmployeeReactor = new ObEmployeeReactor(L"EMPLOYEE");
+		pObEmployeeReactor = new ObEmployeeReactor();
 
 		return (retCode);
 	}
