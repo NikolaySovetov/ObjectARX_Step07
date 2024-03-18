@@ -78,7 +78,7 @@ public:
 		}
 
 		try {
-			ObjectOpenCloseWrapper BTable;
+			SymbolTableWrapper BTable;
 			AcDbBlockTable* pBTable = BTable.GetBlockTable(AcDb::kForWrite);
 
 			if (pBTable->has(strBlockName)) {
@@ -100,7 +100,7 @@ public:
 		}
 
 		try {
-			ObjectOpenCloseWrapper layerTable;
+			SymbolTableWrapper layerTable;
 			AcDbLayerTable* pLayerTable = layerTable.GetLayerTable(AcDb::OpenMode::kForWrite);
 
 			if (pLayerTable->has(strLayerName)) {
@@ -123,59 +123,6 @@ public:
 		acutPrintf(_T("\nEvent: %s layer created"), strLayerName);
 	}
 
-	static void Step03_createBlockRecord() {
-		try {
-			BlockTableWrapper BTable(AcDb::kForWrite);
-			const TCHAR* strBlockName{ L"EMPLOYEE" };
-
-			if (BTable.Get()->has(strBlockName)) {
-				acutPrintf(_T("\nWarning: %s block exists"), strBlockName);
-				return;
-			}
-
-			auto pBTRecord{ std::make_unique<AcDbBlockTableRecord>() };
-			BlockTableRecordWrapper BTRecord(BTable.Add(pBTRecord));
-
-			BTRecord.Get()->setOrigin(AcGePoint3d::kOrigin);
-			BTRecord.Get()->setName(strBlockName);
-
-			std::unique_ptr<AcDbEntity> face{ std::make_unique<AcDbCircle>
-				(AcGePoint3d::kOrigin, AcGeVector3d::kZAxis, 1.0) };
-			face->setColorIndex(2);
-			BTRecord.Add(face);
-
-			std::unique_ptr<AcDbEntity> rightEye{ std::make_unique<AcDbCircle>
-				(AcGePoint3d(0.33, 0.25, 0), AcGeVector3d::kZAxis, 0.1) };
-			rightEye->setColorIndex(4);
-			BTRecord.Add(rightEye);
-
-			std::unique_ptr<AcDbEntity> leftEye{ std::make_unique<AcDbCircle>
-				(AcGePoint3d(-0.33, 0.25, 0), AcGeVector3d::kZAxis, 0.1) };
-			leftEye->setColorIndex(4);
-			BTRecord.Add(leftEye);
-
-			const double pi{ 3.1415926 };
-			std::unique_ptr<AcDbEntity> mouth{ std::make_unique<AcDbArc>
-				(AcGePoint3d(0.0, 0.5, 0.0), AcGeVector3d::kZAxis, 1.0, pi + pi * 0.3, pi + pi * 0.7) };
-			mouth->setColorIndex(1);
-			BTRecord.Add(mouth);
-		}
-		catch (const std::exception& e) {
-			acutPrintf(_T("\nException: %s"), e.what());
-		}
-	}
-
-	static void Step03_createTest() {
-		TCHAR strBlockName[128];
-		if (acedGetString(0, _T("Enter text: "), strBlockName) != RTNORM) {
-			return;
-		}
-
-		int val = _tcscmp(_T("TEST"), strBlockName);
-		acutPrintf(_T("\nvalue = %d"), val);
-
-	}
-
 	virtual AcRx::AppRetCode On_kLoadDwgMsg(void* pkt) {
 		AcRx::AppRetCode retCode = AcRxArxApp::On_kLoadDwgMsg(pkt);
 
@@ -189,7 +136,5 @@ public:
 //-----------------------------------------------------------------------------
 IMPLEMENT_ARX_ENTRYPOINT(CStep03App)
 
-ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, Step03, _createBlockRecord, createBlockRecord, ACRX_CMD_TRANSPARENT, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, Step03, _createBlock, createBlock, ACRX_CMD_TRANSPARENT, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, Step03, _createLayer, createLayer, ACRX_CMD_TRANSPARENT, NULL)
-ACED_ARXCOMMAND_ENTRY_AUTO(CStep03App, Step03, _createTest, createTest, ACRX_CMD_TRANSPARENT, NULL)

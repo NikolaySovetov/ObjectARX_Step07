@@ -2,13 +2,13 @@
 #include "StdAfx.h"
 #include <memory>
 
-class ObjectOpenCloseWrapper {
+class SymbolTableWrapper {
 private:
-	AcDbObject* m_pObject;
+	AcDbSymbolTable* m_pSTable;
 
 public:
-	ObjectOpenCloseWrapper();
-	~ObjectOpenCloseWrapper();
+	SymbolTableWrapper();
+	~SymbolTableWrapper();
 
 	AcDbBlockTable* GetBlockTable(AcDb::OpenMode mode);
 	AcDbLayerTable* GetLayerTable(AcDb::OpenMode mode);
@@ -16,32 +16,6 @@ public:
 };
 
 void AddEmployeeBlockRecord(AcDbBlockTable* pBTable, const TCHAR* strBlockName);
-
-//----------------------------------------------------------
-class BlockTableWrapper {
-private:
-	AcDbBlockTable* m_pBlockTable{};
-
-public:
-	BlockTableWrapper(AcDb::OpenMode mode);
-	~BlockTableWrapper();
-	AcDbBlockTable* Get();
-	AcDbBlockTableRecord*
-		Add(std::unique_ptr<AcDbBlockTableRecord>& pBlockTableRecord);
-};
-
-class BlockTableRecordWrapper {
-private:
-	AcDbBlockTableRecord* m_pBlockTableRecord{};
-
-public:
-	BlockTableRecordWrapper(AcDbBlockTableRecord*);
-	~BlockTableRecordWrapper();
-	AcDbBlockTableRecord* Get();
-	void Add(std::unique_ptr<AcDbEntity>& pEntity);
-};
-
-
 
 
 
