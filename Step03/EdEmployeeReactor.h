@@ -51,13 +51,16 @@
 //----- Note: Uncomment the DLLIMPEXP symbol below if you wish exporting
 //----- your class to other ARX/DBX modules
 class /*DLLIMPEXP*/ EdEmployeeReactor : public AcEditorReactor {
+private:
+	const TCHAR* m_strBlockName{};
 
 protected:
 	//----- Auto initialization and release flag.
 	bool mbAutoInitAndRelease;
 
 public:
-	EdEmployeeReactor(const bool autoInitAndRelease = true);
+	EdEmployeeReactor(const TCHAR* strBlockName,
+		const bool autoInitAndRelease = true);
 	virtual ~EdEmployeeReactor();
 
 	virtual void Attach();

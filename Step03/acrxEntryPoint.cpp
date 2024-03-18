@@ -48,8 +48,8 @@ public:
 		AcRx::AppRetCode retCode = AcRxArxApp::On_kInitAppMsg(pkt);
 
 		// TODO: Add your initialization code here
-		pEdEmployeeReactor = new EdEmployeeReactor(true);
-		pObEmployeeReactor = new ObEmployeeReactor;
+		pEdEmployeeReactor = new EdEmployeeReactor(L"EMPLOYEE", true);
+		pObEmployeeReactor = new ObEmployeeReactor(L"EMPLOYEE");
 
 		return (retCode);
 	}

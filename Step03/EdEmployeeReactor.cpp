@@ -26,7 +26,11 @@
 #include "EdEmployeeReactor.h"
 
 //-----------------------------------------------------------------------------
-EdEmployeeReactor::EdEmployeeReactor(const bool autoInitAndRelease) : AcEditorReactor(), mbAutoInitAndRelease(autoInitAndRelease) {
+EdEmployeeReactor::EdEmployeeReactor(const TCHAR* strBlockName,
+	const bool autoInitAndRelease) : AcEditorReactor(), mbAutoInitAndRelease(autoInitAndRelease) {
+
+	m_strBlockName = strBlockName;
+	
 	if (autoInitAndRelease) {
 		if (acedEditor)
 			acedEditor->addReactor(this);

@@ -51,12 +51,14 @@
 //----- Note: Uncomment the DLLIMPEXP symbol below if you wish exporting
 //----- your class to other ARX/DBX modules
 class /*DLLIMPEXP*/ ObEmployeeReactor : public AcDbObjectReactor {
+private:
+	const TCHAR* m_strBlockName{};
 
 public:
 	ACRX_DECLARE_MEMBERS(ObEmployeeReactor) ;
 
 public:
-	ObEmployeeReactor () ;
+	ObEmployeeReactor (const TCHAR* strBlockName) ;
 	virtual ~ObEmployeeReactor () ;
 
 	virtual void openedForModify(const AcDbObject* pObject);
